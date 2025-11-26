@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Orders Dashboard</title>
+
+    <style>
+      body {
+        background: #0f172a;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #7fff00;
+        text-transform: uppercase;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #1e293b;
+        overflow: hidden;
+        border-radius: 10px;
+      }
+
+      table thead {
+        background: #334155;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        text-align: left;
+        font-size: 14px;
+        border-bottom: 1px solid #334155;
+      }
+
+      tr:hover {
+        background: #273549;
+      }
+
+      th {
+        color: #7fff00;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .btn-edit,
+      .btn-delete {
+        padding: 6px 12px;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 6px;
+        font-size: 13px;
+        display: inline-block;
+        text-align: center;
+      }
+
+      .btn-edit {
+        background: #38bdf8;
+        color: #000;
+      }
+      .btn-edit:hover {
+        background: #0ea5e9;
+      }
+
+      .btn-delete {
+        background: #ef4444;
+        color: #fff;
+      }
+      .btn-delete:hover {
+        background: #dc2626;
+      }
+
+      .logout-btn {
+        background: #ef4444;
+        color: #fff;
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-weight: bold;
+        float: right;
+        margin-bottom: 15px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .logout-btn:hover {
+        background: #b91c1c;
+      }
+    </style>
+  </head>
+
+  <body>
+    <a href="/admin/logout" class="logout-btn">Logout</a>
+
+    <h1>All Orders</h1>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>WhatsApp</th>
+          <th>Service</th>
+          <th>Topic</th>
+          <th>Deadline</th>
+          <th>Notes</th>
+          <th>Status</th>
+          <th>Payment</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% orders.forEach((order) => { %>
+        <tr>
+          <td><%= order.studentName %></td>
+          <td><%= order.whatsAppNumber %></td>
+          <td><%= order.serviceType %></td>
+          <td><%= order.topic || "—" %></td>
+          <td><%= order.deadline.toISOString().split("T")[0] %></td>
+          <td><%= order.additionalNotes || "—" %></td>
+          <td><%= order.status %></td>
+          <td><%= order.paymentStatus %></td>
+
+          <td class="actions">
+            <a class="btn-edit" href="/admin/order/<%= order._id %>/edit"
+              >Edit</a
+            >
+
+            <form
+              action="/admin/order/delete/<%= order._id %>"
+              method="POST"
+              style="margin: 0"
+            >
+              <button
+                class="btn-delete"
+                type="submit"
+                onclick="return confirm('Delete this order?');"
+              >
+                Delete
+              </button>
+            </form>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </body>
+</html>

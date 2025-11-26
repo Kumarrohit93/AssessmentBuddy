@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="banner">
+      <h1>AssessmentBuddy</h1>
+    </div>
+    <div class="about">
+      <div class="para">
+        <h2>What we do?</h2>
+        <p>
+          We help students finish their college work faster — with clean
+          formatting, accurate content, and zero plagiarism.
+        </p>
+        <p>
+          You choose the topic, upload your details, and we deliver on time.
+          Smart solutions for assignments, PPTs & resumes. Fast delivery. Trusted results.
+        </p>
+        <h4>Simple. Smart. Reliable.</h4>
+      </div>
+
+      <div class="image">
+        <img src="../images/—Pngtree—teacher illustration for correcting assignments_4647591.png" alt="">
+      </div>
+    </div>
+    <div class="form-container">
+      <h2>Place Your Order</h2>
+
+      <form action="/order" method="POST">
+        <label>Student Name</label>
+        <input type="text" name="studentName" required />
+
+        <label>WhatsApp Number</label>
+        <input
+          type="text"
+          name="whatsAppNumber"
+          placeholder="10 digits"
+          required
+        />
+<label>Course</label>
+        <input
+          type="text"
+          name="course"
+          placeholder="Please enter your course"
+          required
+        />
+        <label>Service Type</label>
+        <select name="serviceType" id="serviceType" required>
+          <option value="">Select Service</option>
+          <option value="ppt">PPT (₹100)</option>
+          <option value="assessment">Assessment (₹90)</option>
+          <option value="resume">Resume (₹60)</option>
+        </select>
+
+        <!-- Topic only for PPT + Assessment -->
+        <div id="topicField">
+          <label>Topic / Title</label>
+          <input type="text" name="topic" />
+        </div>
+
+        <!-- Resume Only Fields -->
+        <div id="resumeFields" style="display: none">
+          <label>Your Full Name</label>
+          <input type="text" name="resumeName" />
+
+          <label>Qualification</label>
+          <input type="text" name="qualification" />
+
+          <label>Experience</label>
+          <input type="text" name="experience" />
+
+          <label>Specialization</label>
+          <textarea name="specialization" rows="3"></textarea>
+
+          <label>Certifications</label>
+          <textarea name="certifications" rows="3"></textarea>
+        </div>
+
+        <label>Deadline</label>
+        <input type="date" name="deadline" required />
+
+        <label>Additional Notes</label>
+        <textarea name="additionalNotes" rows="4"></textarea>
+
+        <input type="hidden" name="price" id="price" />
+
+        <button type="submit">Submit Order</button>
+      </form>
+    </div>
+
+    <footer class="footer">
+  <div class="footer-container">
+
+    <div class="footer-section">
+      <h3>AssessmentBuddy</h3>
+      <p>Smart solutions for assignments, PPTs & resumes. Fast delivery. Trusted results.</p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p>Email: kumarhimanshu7988@gmail.com</p>
+      <p>Phone: 9306664193</p>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2025 AssessmentBuddy. All Rights Reserved. Made with ❤</p>
+  </div>
+</footer>
+
+   <script>
+  const form = document.querySelector("form");
+
+  form.addEventListener("submit", function (e) {
+    const studentName = form.studentName.value.trim();
+    const whatsAppNumber = form.whatsAppNumber.value.trim();
+    const course = form.course.value.trim();
+    const serviceType = form.serviceType.value;
+    const topic = form.topic?.value.trim();
+    const deadline = form.deadline.value;
+    const resumeName = form.resumeName?.value.trim();
+    const qualification = form.qualification?.value.trim();
+
+    // ---- Student Name ----
+    if (studentName.length < 3) {
+      alert("Enter a valid name (min 3 letters).");
+      e.preventDefault();
+      return;
+    }
+
+    // ---- WhatsApp Number ----
+    if (!/^\d{10}$/.test(whatsAppNumber)) {
+      alert("WhatsApp number must be exactly 10 digits.");
+      e.preventDefault();
+      return;
+    }
+
+    // ---- Course ----
+    if (course.length < 2) {
+      alert("Course name is too short.");
+      e.preventDefault();
+      return;
+    }
+
+    // ---- Service Type ----
+    if (!serviceType) {
+      alert("Please select a service type.");
+      e.preventDefault();
+      return;
+    }
+
+    // ---- Topic Validation (PPT/Assessment) ----
+    if ((serviceType === "ppt" || serviceType === "assessment") && topic.length < 3) {
+      alert("Topic is required for PPT/Assessment.");
+      e.preventDefault();
+      return;
+    }
+
+    // ---- Resume Validation ----
+    if (serviceType === "resume") {
+      if (resumeName.length < 3) {
+        alert("Enter your full name for resume.");
+        e.preventDefault();
+        return;
+      }
+      if (qualification.length < 2) {
+        alert("Qualification is required.");
+        e.preventDefault();
+        return;
+      }
+    }
+
+    // ---- Deadline Validation ----
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let selectedDate = new Date(deadline);
+
+    if (!deadline || selectedDate < today) {
+      alert("Select a valid deadline (not past).");
+      e.preventDefault();
+      return;
+    }
+  });
+
+  // Existing ServiceType Logic (unchanged)
+  document.getElementById("serviceType").addEventListener("change", function () {
+    const service = this.value;
+    const topicField = document.getElementById("topicField");
+    const resumeFields = document.getElementById("resumeFields");
+    const priceField = document.getElementById("price");
+
+    if (service === "ppt" || service === "assessment") {
+      topicField.style.display = "block";
+      resumeFields.style.display = "none";
+      priceField.value = 60;
+    } else if (service === "resume") {
+      topicField.style.display = "none";
+      resumeFields.style.display = "block";
+      priceField.value = 100;
+    } else {
+      topicField.style.display = "block";
+      resumeFields.style.display = "none";
+      priceField.value = "";
+    }
+  });
+</script>
+  </body>
+</html>
