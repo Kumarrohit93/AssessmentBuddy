@@ -54,6 +54,10 @@ app.get("/success", checkOrderAccess, (req, res) => {
   res.render("success.ejs");
 });
 
+app.get("/privacy", (req, res) => {
+  res.render("privacy.ejs");
+});
+
 // ADMIN LOGIN
 app.get("/admin/login", (req, res) => {
   res.render("login.ejs");
